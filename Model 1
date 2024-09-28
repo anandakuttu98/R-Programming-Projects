@@ -1,0 +1,156 @@
+RUNNING A LINEAR REGRESSION MODEL ON OUTPUT INPUT DATA IN DIFFERENT FORMS
+
+DATA
+
+Table 1
+Year	Output	Labour	Capital
+1958	16607.7	275.5	17803.7
+1959	17511.3	274.4	18096.8
+1960	20171.2	269.7	18271.8
+1961	20932.9	267	19167.3
+1962	20406	267.8	19647.6
+1963	20831.6	275	20803.5
+1964	24806.3	283	22076.6
+1965	26465.8	300.7	23445.2
+1966	27403	307.5	24939
+1967	28628.7	303.7	26713.7
+1968	29904.5	304.7	29957.8
+1969	27508.2	298.6	31585.9
+1970	29035.5	295.5	33474.5
+1971	29281.5	299	34821.8
+1972	31535.8	288.1	41794.3
+
+Here the Dependent Variable is Output and the explanatory variables are labour and capital
+
+# 1. Simple Linear Regression Model
+
+# Importing the data from excel
+>library(readxl)
+
+> model_data <- read_excel("C:/Users/HP/Downloads/Store+costs.xlsx", sheet = 2)
+
+> View(model_data)
+
+# Running the Reregression model
+> model <- lm(Output ~ Labour+Capital, data = model_data)
+
+> summary(model)
+
+Call:
+lm(formula = Output ~ Labour + Capital, data = model_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3266.5  -558.1   115.9   946.5  2098.2 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -2.807e+04  9.432e+03  -2.976 0.011578 *  
+Labour       1.479e+02  3.644e+01   4.059 0.001584 ** 
+Capital      4.036e-01  7.356e-02   5.486 0.000139 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1583 on 12 degrees of freedom
+Multiple R-squared:  0.9096,	Adjusted R-squared:  0.8945 
+F-statistic: 60.34 on 2 and 12 DF,  p-value: 5.473e-07
+
+# Interpreting the Results
+Coefficients: - For a unit change in labour, output increases by 1.47 units and for a unit change in capital, output increases by 0.4035 units. Both these variables are significant as the p-values are 0.2 (0.002 x 100) and 0 which is less than 1 which means both are significant at 1% level of significance. 
+#  TRANSFORMING THE REGRESSION FUNCTION INTO A LOGARITHMIC FUNCTION
+
+# 2. Lin-Log Regression Model
+
+> model_data$logout <- log(model_data$Output)
+
+> model_data$logl <- log(model_data$Labour)
+
+> model_data$logcap <- log(model_data$Capital)
+
+# Running a Regression Model
+
+> model_2 <- lm(Output~ logl + logcap, data= model_data)
+
+> summary(model_2)
+
+Call:
+lm(formula = Output ~ logl + logcap, data = model_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2853.2  -733.0   281.3   891.0  1848.7 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -287390      48351  -5.944 6.78e-05 ***
+logl           33607      10655   3.154  0.00831 ** 
+logcap         12059       2014   5.987 6.34e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1477 on 12 degrees of freedom
+Multiple R-squared:  0.9213,	Adjusted R-squared:  0.9082 
+F-statistic: 70.27 on 2 and 12 DF,  p-value: 2.371e-07
+
+# Interpreting the Results: -
+For 1 % change in labour, expected vlaue of output will change by 336.07 units (33607.36/100), and for 1% change in capital, expected value of output will change by 120.69 units. 
+Similarly, for 1 % change in capital, expected value of output will change by 120.59 units(12059/100). 
+
+#3.  Log-Linear Regression Model
+
+> model_3 <- lm(logout ~ Labour + Capital, data = model_data)
+
+> summary(model_3)
+
+Call:
+lm(formula = logout ~ Labour + Capital, data = model_data)
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.176766 -0.022383  0.004601  0.043527  0.106251 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 7.802e+00  4.763e-01  16.380 1.41e-09 ***
+Labour      6.549e-03  1.840e-03   3.558 0.003937 ** 
+Capital     1.617e-05  3.715e-06   4.353 0.000939 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.07996 on 12 degrees of freedom
+Multiple R-squared:  0.8732,	Adjusted R-squared:  0.8521 
+F-statistic: 41.33 on 2 and 12 DF,  p-value: 4.149e-06
+
+Interpretation of the results: -
+
+For a unit change in labour, output changes by 0.65% (0.000065485 x 100). SImilarly, for a unit change in capital, output changes by 0.0016% (0.0000162/100). 
+
+# 4. Log-Log Regression Model
+
+> model_4 <- lm(formula = logout ~ logl + logcap, data= model_data)
+> summary(model_4)
+
+Call:
+lm(formula = logout ~ logl + logcap, data = model_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.15920 -0.02914  0.01179  0.04087  0.09640 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -3.3385     2.4495  -1.363 0.197939    
+logl          1.4988     0.5398   2.777 0.016758 *  
+logcap        0.4899     0.1020   4.800 0.000433 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.07481 on 12 degrees of freedom
+Multiple R-squared:  0.889,	Adjusted R-squared:  0.8705 
+F-statistic: 48.07 on 2 and 12 DF,  p-value: 1.867e-06
+
+# Interpretation of the results: - 
+
+For 1 % change in labour, expected value of output changes by 1.49% and for 1% change in capital, expected value of output changes by 0.48% because log-log model is a direct elasticity measure and hence we nee not multiply or divide by 100.
+
+THe R value is 0.87 which shows that the variation in the explanatory variables is very close to the variation in the dependent varaibles and has high causality. 
