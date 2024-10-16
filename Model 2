@@ -1,0 +1,62 @@
+
+> library(readxl)
+> Econometrics_Data2 <- read_excel("C:/R Programming Work/Econometrics Data2.xlsx", 
++     col_types = c("numeric", "numeric", "numeric", 
++         "numeric", "numeric"))
+There were 32 warnings (use warnings() to see them)
+> View(Econometrics_Data2)
+
+# Single Linear Regression Model
+
+> model1 <- lm(formula = `Infant Mortality Rate` ~ `Per Capita GNP`, data = Econometrics_Data2)
+> summary(model1)
+
+Call:
+lm(formula = `Infant Mortality Rate` ~ `Per Capita GNP`, data = Econometrics_Data2)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-4.522 -3.689 -2.123  2.652 13.642 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       83.5432695  1.7110671   48.83   <2e-16 ***
+`Per Capita GNP` -0.0079036  0.0003926  -20.13   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.783 on 30 degrees of freedom
+Multiple R-squared:  0.9311,	Adjusted R-squared:  0.9288 
+F-statistic: 405.4 on 1 and 30 DF,  p-value: < 2.2e-16
+
+# Multiple Linear Regression Model 
+
+> model2 <- lm(formula = `Infant Mortality Rate` ~ `Per Capita GNP` + `Female Literacy Rate`, data = Econometrics_Data2)
+> summary(model2)
+
+Call:
+lm(formula = `Infant Mortality Rate` ~ `Per Capita GNP` + `Female Literacy Rate`, 
+    data = Econometrics_Data2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.4767 -2.1636 -0.6079  1.3554 11.0037 
+
+Coefficients:
+                         Estimate Std. Error t value Pr(>|t|)    
+(Intercept)             1.049e+02  4.086e+00  25.673  < 2e-16 ***
+`Per Capita GNP`      -4.713e-03  6.466e-04  -7.289 5.00e-08 ***
+`Female Literacy Rate` -6.895e-01  1.259e-01  -5.475 6.79e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.412 on 29 degrees of freedom
+Multiple R-squared:  0.9661,	Adjusted R-squared:  0.9638 
+F-statistic: 413.4 on 2 and 29 DF,  p-value: < 2.2e-16
+
+# 1. 96.61% of total variation in Infant Mortality Rate is explained by Per Capita GNP and Female Literacy Rate. 
+
+# 2. Significance of the explanatory variable:- Female Literacy Rate ---> t = |-5.475| = 5.475 ~ t n-2 at a = 5%
+                                              Per Capita GNP ---> t = |-7.289| = 7.289 ~ t n-2 at a = 5%
+                                              p values for Female Literacy and Per Capita GNP are less than 1 and hence significant at 1% level.
+
